@@ -57,7 +57,11 @@ export default function TeamPage({ params }: TeamPageProps) {
             handleApiResponse(
                 progressResponse,
                 (data) => {
-                    setWeeklySummaries(data || []);
+                    // week 기준 내림차순 정렬
+                    const sortedData = (data || []).sort((a, b) =>
+                        b.studySummary.week - a.studySummary.week
+                    );
+                    setWeeklySummaries(sortedData);
                 },
                 (error) => {
                     console.error('Error loading team progress:', error);
@@ -162,12 +166,12 @@ export default function TeamPage({ params }: TeamPageProps) {
                             <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
                                 {team.name}
                             </h1>
-                            <Badge
+                            {/* <Badge
                                 variant={isRegular ? "default" : "secondary"}
                                 className="text-sm font-medium px-3 py-1"
                             >
                                 {isRegular ? '정규 스터디' : '번개 스터디'}
-                            </Badge>
+                            </Badge> */}
                         </div>
                         <p className="text-muted-foreground text-lg">
                             팀 진행 현황을 확인하고 스터디에 참여하세요
