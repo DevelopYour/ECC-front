@@ -50,10 +50,13 @@ export default function ReviewPage() {
 
     return (
         <div className="space-y-6">
-            {/* Header Description */}
-            <p className="text-gray-600">
-                스터디에서 학습한 내용을 복습하고 테스트로 실력을 확인하세요
-            </p>
+            {/* Page Title */}
+            <div>
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">복습자료 목록</h1>
+                <p className="text-gray-600">
+                    스터디에서 학습한 내용을 복습하고 테스트로 실력을 확인하세요
+                </p>
+            </div>
 
             {/* Status Filter Tabs */}
             <div className="bg-white rounded-lg shadow p-1">

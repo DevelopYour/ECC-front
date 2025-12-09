@@ -13,9 +13,6 @@ export default function ReviewLayout({
     return (
         <div className="min-h-screen">
             <div className="container mx-auto px-4 py-8">
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">복습자료</h1>
-                </div>
                 {children}
             </div>
         </div>

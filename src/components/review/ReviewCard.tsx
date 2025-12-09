@@ -53,50 +53,33 @@ export default function ReviewCard({ review }: ReviewCardProps) {
     return (
         <div
             onClick={isClickable ? handleClick : undefined}
-            className={`bg-white rounded-lg shadow-md transition-all ${isClickable
-                ? "hover:shadow-lg cursor-pointer"
+            className={`bg-gray-50 rounded-lg transition-all ${isClickable
+                ? "hover:shadow-md hover:bg-gray-100 cursor-pointer"
                 : "opacity-75 cursor-not-allowed"
-                } p-6`}
+                } p-4`}
         >
-            <div className="flex items-start justify-between mb-4">
-                <div>
-                    <h3 className="text-lg font-semibold text-gray-900">Week {review.week}</h3>
-                </div>
-                <div className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(review.status)}`}>
-                    {getStatusIcon(review.status)}
-                    <span>{getStatusText(review.status)}</span>
-                </div>
-            </div>
-
-            <div className="space-y-3">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Calendar className="w-4 h-4" />
-                    <span>
-                        {format(new Date(review.createdAt), "yyyy년 MM월 dd일", { locale: ko })}
-                    </span>
-                </div>
-
-                {review.status !== ReviewStatus.NOT_READY && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <BookOpen className="w-4 h-4" />
-                        <span>복습 가능</span>
+            <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                    <BookOpen className="w-5 h-5 text-gray-600 shrink-0" />
+                    <div className="flex items-center gap-3 flex-wrap flex-1 min-w-0">
+                        <h3 className="text-sm font-semibold text-gray-900">[{review.subjectName || "자유회화"}]</h3>
+                        <h3 className="text-sm font-medium text-gray-900">{review.week}주차</h3>
+                        <div className="flex items-center gap-2 text-xs text-gray-600">
+                            <Calendar className="w-3 h-3" />
+                            <span>{format(new Date(review.createdAt), "yyyy.MM.dd", { locale: ko })}</span>
+                        </div>
+                        {review.status === ReviewStatus.NOT_READY && (
+                            <span className="text-xs text-gray-500">AI가 복습자료를 생성중입니다</span>
+                        )}
                     </div>
-                )}
+                </div>
+                <div className="flex items-center gap-3 shrink-0">
+                    <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(review.status)}`}>
+                        {getStatusIcon(review.status)}
+                        <span>{getStatusText(review.status)}</span>
+                    </div>
+                </div>
             </div>
-
-            {review.status === ReviewStatus.NOT_READY ? (
-                <div className="mt-4 pt-4 border-t">
-                    <p className="text-sm text-gray-500 text-center">
-                        AI가 복습자료를 생성중입니다
-                    </p>
-                </div>
-            ) : (
-                <div className="mt-4 pt-4 border-t">
-                    <button className="w-full py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium">
-                        {review.status === ReviewStatus.COMPLETED ? "복습 결과 보기" : "복습 시작하기"}
-                    </button>
-                </div>
-            )}
         </div>
     );
 }

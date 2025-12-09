@@ -18,6 +18,8 @@ export interface Review {
     reportId: string;
     week: number;
     member: MemberIdAndName;
+    subjectId: number;
+    subjectName: string;
     status: ReviewStatus;
     topics: ReportTopic[]; // speaking
     corrections: CorrectionRedis[]; // general

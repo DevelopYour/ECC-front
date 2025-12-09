@@ -14,7 +14,7 @@ export default function ReviewList({ reviews }: ReviewListProps) {
     });
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="space-y-3">
             {sortedReviews.map((review) => (
                 <ReviewCard key={review.id} review={review} />
             ))}

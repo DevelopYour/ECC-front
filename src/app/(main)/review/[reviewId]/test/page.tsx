@@ -115,14 +115,11 @@ export default function ReviewTestPage() {
     }
 
     return (
-        <div>
-            <button
-                onClick={() => router.back()}
-                className="flex items-center gap-2 mb-6 text-gray-600 hover:text-gray-900"
-            >
-                <ArrowLeft className="w-4 h-4" />
-                <span>뒤로가기</span>
-            </button>
+        <div className="space-y-6">
+            <div>
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">복습 테스트</h1>
+                <p className="text-gray-600">학습한 내용을 테스트로 확인해보세요</p>
+            </div>
 
             {showResult ? (
                 <TestResult
@@ -137,6 +134,14 @@ export default function ReviewTestPage() {
                     onCancel={() => router.back()}
                 />
             )}
+
+            <button
+                onClick={() => router.back()}
+                className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+            >
+                <ArrowLeft className="w-4 h-4" />
+                <span>뒤로가기</span>
+            </button>
         </div>
     );
 }

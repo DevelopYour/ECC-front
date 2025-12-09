@@ -11,7 +11,7 @@ export default function TestResult({ test, onRetry, onBack }: TestResultProps) {
     // 안전성 체크
     if (!test || !test.questions || test.questions.length === 0) {
         return (
-            <div className="bg-white rounded-lg shadow-lg max-w-4xl mx-auto p-8">
+            <div className="bg-white rounded-lg p-8">
                 <div className="text-center">
                     <p className="text-gray-500">테스트 결과가 없습니다.</p>
                     <button
@@ -64,13 +64,13 @@ export default function TestResult({ test, onRetry, onBack }: TestResultProps) {
     const getQuestionStyle = (gradeLevel: GradeLevel | null) => {
         switch (gradeLevel) {
             case GradeLevel.CORRECT:
-                return "bg-green-50 border-green-200";
+                return "bg-green-50";
             case GradeLevel.PARTIAL:
-                return "bg-yellow-50 border-yellow-200";
+                return "bg-yellow-50";
             case GradeLevel.INCORRECT:
-                return "bg-red-50 border-red-200";
+                return "bg-red-50";
             default:
-                return "bg-gray-50 border-gray-200";
+                return "bg-gray-50";
         }
     };
 
@@ -88,16 +88,16 @@ export default function TestResult({ test, onRetry, onBack }: TestResultProps) {
     };
 
     return (
-        <div className="bg-white rounded-lg shadow-lg max-w-4xl mx-auto">
+        <div className="space-y-6">
             {/* Header */}
-            <div className="p-8 text-center border-b">
+            <div className="text-center bg-white rounded-lg p-8">
                 <Trophy className={`w-16 h-16 mx-auto mb-4 ${getScoreColor()}`} />
                 <h2 className="text-2xl font-bold mb-2">테스트 결과</h2>
                 <p className="text-lg text-gray-600">{getScoreMessage()}</p>
             </div>
 
             {/* Score */}
-            <div className="p-8 bg-gray-50">
+            <div className="bg-white rounded-lg p-8">
                 <div className="text-center mb-8">
                     <div className={`text-5xl font-bold ${getScoreColor()}`}>
                         {percentage}%
@@ -125,7 +125,7 @@ export default function TestResult({ test, onRetry, onBack }: TestResultProps) {
                         return (
                             <div
                                 key={index}
-                                className={`p-4 rounded-lg border ${getQuestionStyle(question.grade)}`}
+                                className={`p-4 rounded-lg ${getQuestionStyle(question.grade)}`}
                             >
                                 <div className="flex items-start gap-3">
                                     {getQuestionIcon(question.grade)}
@@ -134,18 +134,18 @@ export default function TestResult({ test, onRetry, onBack }: TestResultProps) {
                                             Q{index + 1}. {question.question}
                                         </p>
                                         {question.answer && (
-                                            <div className="mt-2 p-2 bg-blue-50 rounded">
+                                            <div className="mt-2 p-2 bg-white/50 rounded">
                                                 <p className="text-xs font-medium text-gray-600 mb-1">정답:</p>
                                                 <p className="text-sm text-gray-700">{question.answer}</p>
                                             </div>
                                         )}
                                         {question.response && (
-                                            <div className="mt-2 p-2 bg-white rounded">
+                                            <div className="mt-2 p-2 bg-white/50 rounded">
                                                 <p className="text-xs font-medium text-gray-600 mb-1">내 답변:</p>
                                                 <p className="text-sm text-gray-700">{question.response}</p>
                                             </div>
                                         )}
-                                        <p className={`text-xs mt-2 ${resultInfo.color}`}>
+                                        <p className={`text-xs mt-2 font-medium ${resultInfo.color}`}>
                                             {resultInfo.text}
                                         </p>
                                     </div>
@@ -157,7 +157,7 @@ export default function TestResult({ test, onRetry, onBack }: TestResultProps) {
             </div>
 
             {/* Actions */}
-            <div className="p-6 border-t bg-gray-50">
+            <div className="bg-gray-50 rounded-lg p-6">
                 <div className="flex items-center justify-center gap-4">
                     <button
                         onClick={onBack}
