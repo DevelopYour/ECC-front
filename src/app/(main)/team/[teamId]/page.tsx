@@ -163,7 +163,7 @@ export default function TeamPage({ params }: TeamPageProps) {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b">
                     <div className="space-y-2">
                         <div className="flex items-center gap-3">
-                            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+                            <h1 className="text-xl md:text-3xl font-bold tracking-tight">
                                 {team.name}
                             </h1>
                             {/* <Badge

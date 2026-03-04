@@ -5,6 +5,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import { Textarea } from '@/components/ui/textarea';
 import { handleApiResponse, studyApi } from '@/lib/api';
 import {
@@ -13,7 +21,7 @@ import {
     StudyRedis,
     VocabRedis
 } from '@/types/study';
-import { ArrowLeft, BookOpen, Check, Languages, Loader2, MessageSquare, Plus, X } from 'lucide-react';
+import { ArrowLeft, BookOpen, Check, Languages, Loader2, MessageSquare, Mic, Plus, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { use, useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -45,6 +53,10 @@ export default function GeneralStudyPage({ params }: StudyPageProps) {
     // 교정 요청 관련 상태
     const [feedbackQuestion, setFeedbackQuestion] = useState('');
     const [loadingFeedback, setLoadingFeedback] = useState(false);
+
+    // 녹음 분석 관련 상태
+    const [analysisResult, setAnalysisResult] = useState<{ script: string; feedback: any[] } | null>(null);
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
 
     useEffect(() => {
         getStudyData();
@@ -338,6 +350,26 @@ export default function GeneralStudyPage({ params }: StudyPageProps) {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleStartAnalysis = () => {
+        setIsAnalyzing(true);
+        // Simulate analysis time
+        setTimeout(() => {
+            setAnalysisResult({
+                script: `Hyo: Do you remember that mom shaved my hair when I was young because my hair didn’t grow up?
+Do: Yeah. She concerned and believed it will be helpful.
+Hyo: And surprisingly my hair became lot and long.`,
+                feedback: [
+                    { original: 'shaved my hair', corrected: 'shaved my head', explanation: '영어에서는 "머리를 밀다"를 head로 표현해요.' },
+                    { original: 'didn\'t grow up', corrected: 'wasn\'t growing well', explanation: 'grow up은 사람이 성장하는 것이고, 머리카락은 grow를 사용해요.' },
+                    { original: 'She concerned', corrected: 'She was worried', explanation: 'concerned는 형용사이므로 be동사가 필요해요! 더 자연스럽게 was worried를 써요.' },
+                    { original: 'it will be helpful', corrected: 'it would be helpful', explanation: '과거 시점의 이야기이므로 시제를 일치시켜요.' },
+                    { original: 'became lot and long', corrected: 'became thicker and longer', explanation: '"숱이 많아지고 길어졌다"는 thicker and longer로 표현합니다.' },
+                ]
+            });
+            setIsAnalyzing(false);
+        }, 1500); // Simulate a 1.5 second analysis
     };
 
     if (!studyRoom || loading) {
@@ -731,6 +763,112 @@ export default function GeneralStudyPage({ params }: StudyPageProps) {
                         </CardContent>
                     </Card>
                 </div>
+
+                {/* 녹음본 분석 섹션 */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <Mic className="h-5 w-5" />
+                            녹음본 업로드해서 분석하기
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="p-4 border border-dashed border-gray-300 rounded-lg space-y-3">
+                            <div className="space-y-1">
+                                <Label htmlFor="audio-upload">녹음 파일</Label>
+                                <Input id="audio-upload" type="file" accept="audio/*" />
+                            </div>
+                            <Button
+                                onClick={handleStartAnalysis}
+                                disabled={isAnalyzing}
+                                className="w-full"
+                            >
+                                {isAnalyzing ? (
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                ) : null}
+                                {isAnalyzing ? '분석 중...' : '분석 시작'}
+                            </Button>
+                        </div>
+
+                        {isAnalyzing && (
+                            <div className="flex items-center justify-center p-8">
+                                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                                <p className="ml-4 text-muted-foreground">AI가 녹음본을 분석하고 있습니다...</p>
+                            </div>
+                        )}
+
+                        {analysisResult && (
+                            <div className="space-y-6 pt-4">
+                                {/* 스크립트 결과 */}
+                                <div>
+                                    <h3 className="text-lg font-semibold mb-2">스크립트 추출 결과</h3>
+                                    <div className="p-4 bg-gray-50 rounded-lg border space-y-1 whitespace-pre-wrap">
+                                        {analysisResult.script.split('\n').filter(line => line.trim()).map((line, index) => {
+                                            const parts = line.split(':');
+                                            const speaker = parts[0]?.trim();
+                                            const dialogue = parts.slice(1).join(':').trim();
+
+                                            if (!speaker || !dialogue) {
+                                                return null;
+                                            }
+
+                                            let bgColorClass = 'bg-gray-200'; // Default light gray background
+                                            let textColorClass = 'text-gray-800'; // Default dark text
+
+                                            if (speaker === 'Hyo') {
+                                                bgColorClass = 'bg-purple-400';
+                                                textColorClass = 'text-white';
+                                            } else if (speaker === 'Do') {
+                                                bgColorClass = 'bg-green-400';
+                                                textColorClass = 'text-white';
+                                            } else {
+                                                // For other speakers, generate a consistent background color
+                                                const bgColors = ['bg-purple-200', 'bg-red-200', 'bg-yellow-200', 'bg-indigo-200'];
+                                                const textColors = ['text-purple-800', 'text-red-800', 'text-yellow-800', 'text-indigo-800'];
+                                                let hash = 0;
+                                                for (let i = 0; i < speaker.length; i++) {
+                                                    hash = speaker.charCodeAt(i) + ((hash << 5) - hash);
+                                                }
+                                                const colorIndex = Math.abs(hash) % bgColors.length;
+                                                bgColorClass = bgColors[colorIndex];
+                                                textColorClass = textColors[colorIndex]; // Matching text color for better contrast
+                                            }
+
+                                            return (
+                                                <p key={index} className="text-sm">
+                                                    <strong className={`inline-block px-2 py-0.5 rounded ${bgColorClass} ${textColorClass} mr-2`}>{speaker}</strong>: {dialogue}
+                                                </p>
+                                            );
+                                        })}                                    </div>
+                                </div>
+
+                                {/* 피드백 결과 */}
+                                <div>
+                                    <h3 className="text-lg font-semibold mb-2">피드백 결과</h3>
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>원문</TableHead>
+                                                <TableHead>수정</TableHead>
+                                                <TableHead>설명</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {analysisResult.feedback.map((item, index) => (
+                                                <TableRow key={index}>
+                                                    <TableCell className="line-through text-muted-foreground">{item.original}</TableCell>
+
+                                                    <TableCell className="font-medium text-blue-600">{item.corrected}</TableCell>
+                                                    <TableCell>{item.explanation}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
             </div>
         </div>
     );
