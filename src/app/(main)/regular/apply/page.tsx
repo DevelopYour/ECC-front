@@ -82,7 +82,7 @@ export default function RegularApplyPage() {
                                     <ul className="space-y-1 ml-4">
                                         <li>• 자유회화: 5,000원</li>
                                         <li>• 오픽/토익/토플/아이엘츠: 각 15,000원</li>
-                                        <li>• 입금계좌: 카카오뱅크 3333-26-9447428 (조유진)</li>
+                                        <li>• 입금계좌: 토스뱅크 1002-1019-0485 김창환(모임통장)</li>
                                     </ul>
                                 </div>
                                 <div>

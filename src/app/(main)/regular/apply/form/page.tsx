@@ -319,8 +319,7 @@ export default function RegularStudyApplyFormPage() {
                     <div className="mb-4 p-3 bg-white border border-yellow-300 rounded">
                         <h4 className="text-sm font-medium text-gray-700 mb-2">입금 계좌</h4>
                         <div className="text-sm space-y-1">
-                            <p><strong>토스뱅크 1002-1019-0485</strong></p>
-                            <p><strong>김창환(모임통장)</strong></p>
+                            <p><strong>토스뱅크 1002-1019-0485 김창환(모임통장)</strong></p>
                         </div>
                     </div>
 
